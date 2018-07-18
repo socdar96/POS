@@ -1,0 +1,132 @@
+﻿@model SampleCodeFirstIn.Models.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+
+@*<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    Username
+                    <input id="txtUsername" type="text" />
+                    Password
+                    <input id="txtPassword" type="password" />
+
+                    <button type="button" id="btnLogin" class="btn btn-primary for-add-category">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+    <!-- CSS -->
+<link href="~/Content/Login.css" rel="stylesheet" />
+
+<title>DXTA Monitoring - @ViewBag.Title</title>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-login">
+                <div class="panel-heading">
+                    <hr>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new {  role = "form", style = "display:block" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                        @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @placeholder = "Username" })
+                                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "form-password", @name = "form-password", @placeholder = "Password", @type = "password" })
+                                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+
+
+                            @*<form id="register-form" action="" method="post" role="form" style="display: none;">
+                                <div class="form-group">
+                                    <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnLogin').click(function () {
+            auth_user($("#txtUsername").val(), $("#txtPassword").val());
+        });
+        $(".panel-body").keypress(function (event) {
+            if (event.which == 13) {
+                auth_user($("#txtUsername").val(), $("#txtPassword").val());
+            }
+        });
+    });
+
+    function auth_user(username, password) {
+        $.ajax({
+            type: "POST",
+            url: "/Account/validateUser",
+            data: { "_Username": username, "_Password": password },
+            success: function (res) {
+                if (res == 1)
+                {
+                    window.location = baseUrl + "Home/Main";
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert(xhr.status); alert(thrownError);
+            }
+        });
+    }
+
+</script>
+
+<style>
+    .input-validation-error {
+        border: 1px solid #a94442 !important;
+    }
+</style>

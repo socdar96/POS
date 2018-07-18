@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+    .w3-grey {
+        color: #fff !important;
+        background-color: #4CAF50 !important;
+    }
+
+    a.download-datasheet {
+        padding: 15px 20px;
+        background-color: #073860;
+        color: #fff;
+    }
+</style>
+<body>
+    <a class="download-datasheet" href="">Download Data Sheet</a></p>
+    <div class="w3-border">
+        <div class="w3-grey" id="myBar" style="height:24px;width:20%"></div>
+    </div>
+
+    <script type="text/javascript">
+        //$(".download-datasheet").on('click', function () {
+
+        //    var elem = document.getElementById("myBar");
+        //        var width = 20;
+        //        var id = setInterval(frame, 10);
+
+        //        function frame() {
+        //            if (width >= 100) {
+        //                clearInterval(id);
+        //            } else {
+        //                width++;
+        //                elem.style.width = width + '%';
+        //                elem.innerHTML = width * 1 + '%';
+        //            }
+        //        }
+        //});
+
+
+        $(document).ready(function () {
+            $('.download-datasheet').on('click', function () {
+                alert('Loading started');
+                var token = new Date().getTime();
+
+                $.cookie("fileDownloadToken", token, { expires: 1, path: '/' });
+                var url = '@Url.Content("http://www.spgcontrols.com/wp-content/uploads/2018/03/datasheet%20-%20s1000.pdf")';
+
+                //send the request
+                window.location = url;
+
+                // To check the cookie returned back from the server every one second
+                downloadCheck = window.setInterval(function () {
+                    var cookieValue = $.cookie('fileDownloadToken');
+                    if (cookieValue == token * (-1))
+                        downloadStarted();
+                }, 1000);
+
+                function downloadStarted() {
+                    window.clearInterval(downloadCheck);
+                    $.cookie('fileDownloadToken', null); //clear the cookie value
+                    alert('It is time to hide the message');
+                }
+            });
+        });
+   // }
+//}
+
+
+
+    </script>
+</body>
+</html>
