@@ -14,5 +14,7 @@ namespace SampleCodeFirstIn.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Transactions> Transactions { get; set; }
         public DbSet<Transaction_Details> Transaction_Details { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
+        public DbSet<PaymentType> PaymentType { get; set; }
     }
 }

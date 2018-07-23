@@ -10,8 +10,14 @@ namespace SampleCodeFirstIn.Models
     public class Transactions
     {
         [Key]
-        public decimal trans_No { get; set; }
+        public string trans_No { get; set; }
         public DateTime Date { get; set; }
+        public int user { get; set; }
+        public int paymentType { get; set; }
+        public int disPercent { get; set; }
+        public int disAmount { get; set; }
+        public int shiftid { get; set; }
+        public decimal grossAmount { get; set; }
 
         [ForeignKey("trans_No")]
         public ICollection<Transaction_Details> Transaction_Details { get; set; }

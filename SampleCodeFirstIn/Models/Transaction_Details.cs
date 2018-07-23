@@ -10,9 +10,13 @@ namespace SampleCodeFirstIn.Models
     public class Transaction_Details
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int transDetId { get; set; }
         public int ProductID { get; set; }
+        public int qty { get; set; }
         public decimal price { get; set; }
-        public decimal trans_No { get; set; }
+        public string trans_No { get; set; }
+        public bool isVoid { get; set; }
 
         public Transactions Transaction { get; set; }
     }

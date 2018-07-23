@@ -34,6 +34,8 @@ namespace SampleCodeFirstIn.Models
         public string Pwd { get; set; }
 
         public string userName { get; set; }
+
+        public int shiftid { get; set; }
         
     }
 }

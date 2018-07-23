@@ -174,10 +174,44 @@
     <Compile Include="Migrations\201804130613214_test.Designer.cs">
       <DependentUpon>201804130613214_test.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807190817261_Update Table Details.cs" />
+    <Compile Include="Migrations\201807190817261_Update Table Details.Designer.cs">
+      <DependentUpon>201807190817261_Update Table Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807190849112_updateData Type.cs" />
+    <Compile Include="Migrations\201807190849112_updateData Type.Designer.cs">
+      <DependentUpon>201807190849112_updateData Type.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807200154422_Power.cs" />
+    <Compile Include="Migrations\201807200154422_Power.Designer.cs">
+      <DependentUpon>201807200154422_Power.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807200242237_Powers.cs" />
+    <Compile Include="Migrations\201807200242237_Powers.Designer.cs">
+      <DependentUpon>201807200242237_Powers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807200243339_Shifts.cs" />
+    <Compile Include="Migrations\201807200243339_Shifts.Designer.cs">
+      <DependentUpon>201807200243339_Shifts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807200247195_Shifts_ID.cs" />
+    <Compile Include="Migrations\201807200247195_Shifts_ID.Designer.cs">
+      <DependentUpon>201807200247195_Shifts_ID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807200250153_Shifts_Starts.cs" />
+    <Compile Include="Migrations\201807200250153_Shifts_Starts.Designer.cs">
+      <DependentUpon>201807200250153_Shifts_Starts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807200300045_PAymentMethod.cs" />
+    <Compile Include="Migrations\201807200300045_PAymentMethod.Designer.cs">
+      <DependentUpon>201807200300045_PAymentMethod.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\PaymentType.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Shift.cs" />
     <Compile Include="Models\Transactions.cs" />
     <Compile Include="Models\Transaction_Details.cs" />
     <Compile Include="Models\User.cs" />
@@ -222,6 +256,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="plugins\jQBTK\jqbtk.css" />
+    <Content Include="plugins\jQBTK\jqbtk.js" />
+    <Content Include="plugins\jQBTK\jqbtk.min.css" />
+    <Content Include="plugins\jQBTK\jqbtk.min.js" />
+    <Content Include="plugins\jquery.virtual_keyboard\jquery.virtual_keyboard.css" />
+    <Content Include="plugins\jquery.virtual_keyboard\jquery.virtual_keyboard.js" />
     <Content Include="Scripts\BootsAlert.js" />
     <Content Include="Scripts\bootstrap-3.3.7\css\bootstrap-theme.css" />
     <Content Include="Scripts\bootstrap-3.3.7\css\bootstrap-theme.min.css" />
@@ -446,6 +486,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804130613214_test.resx">
       <DependentUpon>201804130613214_test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807190817261_Update Table Details.resx">
+      <DependentUpon>201807190817261_Update Table Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807190849112_updateData Type.resx">
+      <DependentUpon>201807190849112_updateData Type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807200154422_Power.resx">
+      <DependentUpon>201807200154422_Power.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807200242237_Powers.resx">
+      <DependentUpon>201807200242237_Powers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807200243339_Shifts.resx">
+      <DependentUpon>201807200243339_Shifts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807200247195_Shifts_ID.resx">
+      <DependentUpon>201807200247195_Shifts_ID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807200250153_Shifts_Starts.resx">
+      <DependentUpon>201807200250153_Shifts_Starts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807200300045_PAymentMethod.resx">
+      <DependentUpon>201807200300045_PAymentMethod.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

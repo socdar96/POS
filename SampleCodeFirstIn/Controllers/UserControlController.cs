@@ -39,7 +39,8 @@ namespace SampleCodeFirstIn.Controllers
                     SurName = nUser.SurName,
                     mobileNo = nUser.mobileNo,
                     disabled = nUser.disabled,
-                    Pwd = MD5Crypt.Encrypt(nUser.Pwd, "admin", true)
+                    Pwd = MD5Crypt.Encrypt(nUser.Pwd, "admin", true),
+                    shiftid = nUser.shiftid
                 };
                 try
                 {

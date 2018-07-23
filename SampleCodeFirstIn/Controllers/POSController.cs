@@ -25,11 +25,11 @@ namespace SampleCodeFirstIn.Controllers
             StringBuilder sb = new StringBuilder();
             var prod = db.Product.Include(o => o.Category).Select(p => new { p.ProductID, p.ProdName, p.Category.CategName, p.Price, p.Stock });
 
-            sb.Append("<option selected='selected' value='' ></option>");
+            //sb.Append("<option selected='selected' value='' ></option>");
 
             foreach (var container in prod)
             {
-                sb.Append("<option value='" + container.ProdName + "' prodID = '" + container.ProductID + "'>" + container.ProdName + "</option>");
+                sb.Append("<option value='" + container.ProdName + "' prodID = '" + container.ProductID + "' price = '" + container.Price + "'>" + container.ProdName + "</option>");
             }
             return Json(sb.ToString(), JsonRequestBehavior.AllowGet);
         }
@@ -47,39 +47,54 @@ namespace SampleCodeFirstIn.Controllers
         [HttpPost]
         public JsonResult ProcessOrder(Order items)
         {
-            //var newTransNo = Convert.ToInt32(GenerateNewSerial());
-            //db.Transactions.Add(new Transactions()
-            //{
-            //    Date = DateTime.Now,
-            //    trans_No = newTransNo
-            //});
-            //foreach (Order.item i in items.items)
-            //{
-            //    db.Transaction_Details.Add(new Transaction_Details()
-            //    {
-            //        ProductID = i.ProductID,
-            //        price = i.price,
-            //        trans_No = newTransNo
-            //    });
-            //}
+            var newTransNo = GenerateNewSerial();
+            db.Transactions.Add(new Transactions()
+            {
+                trans_No = newTransNo,
+                Date = DateTime.Now,
+                user = Convert.ToInt32(Session["userid"].ToString()),
+                paymentType = items.items[0].paymentType,
+                shiftid = 1 // Convert.ToInt32(Session["shiftid"].ToString())
 
-            //try {
-            //    db.SaveChanges();
-            //    return Json(new { isError = "F", message = "Successfully Saved." });
-            //}
-            //catch(Exception ex)
-            //{
-            //    System.Console.WriteLine(ex.Message);
+            });
+            foreach (Order.item i in items.items)
+            {
+                db.Transaction_Details.Add(new Transaction_Details()
+                {
+                    trans_No = newTransNo,
+                    ProductID = i.ProductID,
+                    price = i.price,
+                    qty = i.prod_qty
+                });
+            }
+
+            try
+            {
+                db.SaveChanges();
+                return Json(new { isError = "F", message = "Successfully Saved." });
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
                 return Json(new { isError = "T", message = "Failed Saved." });
-            //}
+            }
         }
-        //private string GenerateNewSerial()
-        //{
-        //    //List<int> transno = new List<int>();
-        //    //foreach (var itm in db.Transactions.Select(o => o.trans_No))
-        //    //    transno.Add(Convert.ToInt32(itm));
+        private string GenerateNewSerial()
+        {
+            List<int> transno = new List<int>();
+            foreach (var itm in db.Transactions.Select(o => o.trans_No))
+                transno.Add(Convert.ToInt32(itm));
 
-        //    //return transno.Count > 0 ? string.Format("{0:00000000}", transno.Max() + 1) : "00000001";
-        //}
+            return transno.Count > 0 ? string.Format("{0:00000000}", transno.Max() + 1) : "00000001";
+        }
+        public JsonResult GetProducts(string term)
+        {
+
+            var suggestions = from s in db.Product
+                              select new { s.ProdName, s.ProductID, s.Price };
+            var namelist = suggestions.Where(n => n.ProdName.ToLower().StartsWith(term.ToLower()));
+
+            return Json(namelist, JsonRequestBehavior.AllowGet);
+        }
     }
 }

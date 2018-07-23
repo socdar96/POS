@@ -8,15 +8,17 @@
 <script src="~/Scripts/bootstrap-select/dist/js/bootstrap-select.js"></script>
 <script src="~/Scripts/BootsAlert.js"></script>
 
-<div class="row">
-    <div class="col-lg-11">
+<div class="row" style="margin-top:15px;">
+    <div class="col-lg-10">
         <div class="panel panel-default">
+            <div class="panel-heading">&nbsp;</div>
             <div class="panel-body">
+                <input type="text" id="txtBarcode" />
 
                     <table id="tblProducts" class="table table-striped table-bordered nowrap">
                         <thead style="color:ivory;" class="navbar-inverse">
                             <tr>
-                                <td>Product ID</td>
+                                <td style="display:none;">Product ID</td>
                                 <td>Product Name</td>
                                 <td>Quantity</td>
                                 <td>Price</td>
@@ -26,17 +28,15 @@
                         <tbody></tbody>
                     </table>
 
-                <div class="text-right">
-                    Total: <input type="number" readonly="readonly" id="txtTotalAmount" />
-                </div>
             </div>
             <div class="panel-footer text-right">
-                <button type="button" id="btnCheckout" class="btn btn-primary">Check Out</button>
+                Total: <input type="number" readonly="readonly" id="txtTotalAmount" />
             </div>
         </div>
     </div>
-    <div class="col-lg-1">
-        <button type="button" id="btnAddItem" class="btn btn-primary">Add item</button>
+    <div class="col-lg-2 btn-grid">
+        <button type="button" id="btnAddItem" class="btn btn-primary">Search</button>
+        <button type="button" id="btnCheckout" class="btn btn-primary">Tender</button>
     </div>
 </div>
 @*Compute*@
@@ -56,6 +56,17 @@
                 </div>
                 <div class="form-horizontal">
                     <div id="row">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3 for-add-both">
+                                Payment:
+                            </label>
+                            <div class="col-sm-9">
+                                <select id="txtPayment" class="form-control for-add-both" title="Please Select">
+                                    <option value="1" selected>Cash</option>
+                                    <option value="2">Credit Card</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3 for-add-both">
                                 Amount Due:
@@ -123,14 +134,20 @@
                             <label class="control-label col-sm-3 col-lg-3">Product Name</label>
 
                             <div class="col-sm-8 col-lg-8">
-                                <select id="txtProdName" class="SelProdList form-control for-add-both" data-live-search="true" title="Please Select"></select>
+                                <select id="txtProdName" class="SelProdList form-control for-add-both selectpicker" data-live-search="true" title="Please Select">
+
+                                </select>
+                                @*<form class="eventInsForm" action="#" method="post">
+                                    <input type="text" id="txtProdName" class="form-control addresspicker" />
+                                </form>*@
+                                
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3 col-lg-3">Quantity</label>
 
                             <div class="col-sm-8 col-lg-8">
-                                <input type="number" id="txtQty" class="form-control" />
+                                <input type="number" id="txtQty" class="keyboard form-control" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -138,6 +155,7 @@
                             </div>
                             <div class="col-sm-8 col-lg-8">
                                 <button type="button" id="btnAddCart" class="btn btn-primary">Add</button>
+                                <button type="button" class="btn btn-default close-button" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -156,46 +174,39 @@
     var prodPrice = 0, prodStock = 0, SumTotal = 0;
 
     $(document).ready(function () {
-        GetProductList();
+       GetProductList();
 
-        $("#txtProdName").change(function () {
-            $.ajax({
-                type: "GET",
-                url: "/POS/GetProductDetails",
-                data: { productID: $("#txtProdName option:selected").attr("prodid") },
-                success: function (res) {
-                    prodPrice = parseFloat(res.Price).toFixed(2);
-                    prodStock = res.Stock;
+       $("#txtProdName").change(function () {
+           var tem_price = $("#txtProdName option:selected").attr("price");
+           prodPrice = parseFloat(tem_price).toFixed(2);
+           //prodStock = res.Stock;
 
-                    $("#txtProdID").val($("#txtProdName option:selected").attr("prodid"));
-                    $("#txtPrice").val(prodPrice);
-                    $("#txtStock").val(prodStock);
-                    $("#txtQty").val("1");
-                }
-            });
-        });
+           $("#txtProdID").val($("#txtProdName option:selected").attr("prodid"));
+           $("#txtPrice").val(prodPrice);
+           //$("#txtStock").val(prodStock);
+           $("#txtQty").val("1");
+           $("#txtQty").focus().select();
+       });
 
-        //$('#txtQty').keyup("change", function () {
-        //    if ($("#txtQty").val() <= $("#txtStock").val()) {
-        //        $("#txtTotal").val(parseFloat(Compute()).toFixed(2));
-        //    }
-        //    else {
-        //        alert('Not enough Stock'); $("#txtQty").val("");
-        //    }
-        //});
 
-        $('#btnAddCart').click(function () {
-            $('#tblProducts tbody').append('<tr clone=true><td>' + $('#txtProdID').val() + '</td>' +
-                '<td>' + $('#txtProdName').val() + '</td>' +
-                '<td>' + $('#txtQty').val() + '</td>' +
-                '<td>' + prodPrice + '</td>' +
-                '<td>' + (parseFloat(Compute()).toFixed(2)) + '</td></tr>'
-            );
-            $("#txtTotalAmount").val(ComputeCheckOut());
-            $("#txtQty").val("");
-            $("#txtProdName").focus();
-        });
-        $('#txtQty').keypress(function (e) {
+       $('#btnAddCart').click(function () {
+           if ($("#txtQty").val() > 0) {
+               $('#tblProducts tbody').append('<tr clone=true><td style="display:none">' + $("#txtProdName option:selected").attr("prodID") + '</td>' +
+                   '<td>' + $('#txtProdName').val() + '</td>' +
+                   '<td>' + $('#txtQty').val() + '</td>' +
+                   '<td>' + prodPrice + '</td>' +
+                   '<td>' + (parseFloat(Compute()).toFixed(2)) + '</td></tr>'
+               );
+               $("#txtTotalAmount").val(ComputeCheckOut());
+               $("#txtQty").val("");
+               //$("#dataPicker").val('default');
+               $("#txtProdName").selectpicker("render");
+               //$("#txtProdName").focus();
+           }
+           else
+               {alert("Invalid Input.")}
+       });
+        $('.modal#ProductModal').keypress(function (e) {
             var key = e.which;
             if (key == 13)  // the enter key code
             {
@@ -203,8 +214,6 @@
                 return false;
             }
         });  
-
-        
 
         $('#btnCheckout').click(function () {
             $('#txtAmountDue').val($('#txtTotalAmount').val());
@@ -215,11 +224,13 @@
         });
         //modal Add Product Popup
         $("#btnAddItem").click(function () {
+            
             $("#ProductModal").modal({
                 modal: true, backdrop: 'static', keyboard: false
             });
+            $("#txtProdName").selectpicker("refresh");
+            //$("#txtProdName").focus();
         });
-
 
         $('#txtComputepayment').click(function () {
             $.ajax({
@@ -233,9 +244,12 @@
                 success: function (data) {
                     if (data.isError != "T") {
                         BootsAlert("success", "Success", data.message, "", "divAlert", "");
+
+                        //$("#tblProducts").load("#tblProducts");
+
+
                     }
                     else {
-                        alert(data.isError);
                         BootsAlert("danger", "Error", data.message, "", "divAlert", "");
                     }
                 },
@@ -251,9 +265,45 @@
 
             $('#txtChange').val((parseFloat(paymentTotal).toFixed(2)));
         });
+
+        $('#txtQty').keyboard({ type: 'numpad' });
+        //$('#txtQty').keyboard({ layout: 'qwerty', usePreview: false });
     });
 
+    //$(function () {
+    //    $("#txtProdName").autocomplete({
 
+    //        source: function (request, response) {
+    //            $.ajax({
+    //                type: "GET",
+    //                url: "/POS/GetProducts",
+    //                data: { term: $("#txtProdName").val() },
+    //                contentType: "application/json; charset=utf-8",
+    //                dataType: "json",
+    //                success: function (data) {
+    //                    response($.map(data, function (item) {
+    //                        return {
+    //                            id: item.ProductID,
+    //                            value: item.ProdName,
+    //                            price: item.Price
+    //                        }
+    //                    }))
+    //                }
+    //            });
+    //        }, minLength: 0,
+    //        select: function (event, ui) {
+    //            $("#txtProdName").attr("prodid", ui.item.id);//Put Id in a hidden field
+    //            prodPrice = parseFloat(ui.item.price).toFixed(2);
+    //            $("#txtQty").val("1");
+    //            $("#txtQty").focus();
+    //            $("#txtQty").select();
+    //        }
+    //    }).focus(function () {
+    //        $(this).autocomplete("search")
+    //    });
+
+    //    //$(".addresspicker").autocomplete("option", "appendTo", ".eventInsForm");
+    //});
 
     function GetProductList() {
         $("#txtProdName").removeClass("selectpicker");
@@ -261,8 +311,9 @@
             type: "GET",
             url: "/POS/GetProductList",
             success: function (res) {
-                $(".SelProdList").html(res);
+                $(".SelProdList").append(res);
                 //$("#txtProdName").addClass("selectpicker");
+                //$('#txtProdName').selectpicker('refresh');
             }
         });
     }
@@ -289,7 +340,77 @@
             checkoutlist.push({ ProductID: $(this).find("td").eq(0).html(), prod_name: $(this).find("td").eq(1).html(), prod_qty: $(this).find("td").eq(2).html(), price: $(this).find("td").eq(3).html(), prod_total: $(this).find("td").eq(4).html() });
         });
         order.items = checkoutlist;
+        order.paymentType = $("#txtPayment option:selected").attr("value");
         return order;
-    }
+    }   
 
 </script>
+@*<style>
+
+    .ui-menu .ui-menu-item a {
+        font-size: 12px;
+    }
+
+    .ui-autocomplete {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1510 !important;
+        float: left;
+        display: none;
+        min-width: 160px;
+        width: 160px;
+        padding: 4px 0;
+        margin: 2px 0 0 0;
+        list-style: none;
+        background-color: #ffffff;
+        border-color: #ccc;
+        border-color: rgba(0, 0, 0, 0.2);
+        border-style: solid;
+        border-width: 1px;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        *border-right-width: 2px;
+        *border-bottom-width: 2px;
+    }
+
+    .ui-menu-item > a.ui-corner-all {
+        display: block;
+        padding: 3px 15px;
+        clear: both;
+        font-weight: normal;
+        line-height: 18px;
+        color: #555555;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+
+    .ui-state-hover, .ui-state-active {
+        color: #ffffff;
+        text-decoration: none;
+        background-color: #0088cc;
+        border-radius: 0px;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        background-image: none;
+    }
+
+    #modalIns {
+        width: 500px;
+    }
+
+    .btn-grid {
+        margin: -2px 0;
+    }
+
+        .btn-grid > .btn {
+            margin: 2px 0;
+        }
+</style>*@

@@ -40,6 +40,7 @@ namespace SampleCodeFirstIn.Controllers
                     int empID = user.userId;
                     Session["userid"] = empID;
                     Session["username"] = _UserName;
+                    Session["shiftid"] = user.shiftid;
                     Session.Timeout = 15;
                     return 1;
                 }
