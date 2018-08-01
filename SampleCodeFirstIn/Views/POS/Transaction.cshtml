@@ -67,6 +67,32 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group for-card" style="display:none;">
+                            <label class="control-label col-sm-3 for-add-both">
+                                Card No:
+                            </label>
+                            <div class="col-sm-9">
+                                @*<input type="text" class="form-control" id="txtCardNumber">*@
+                                <input type="tel" id="txtCardNumber" class="form-control" name="cardNumber" placeholder="Valid Card Number" autocomplete="cc-number" required autofocus />
+                            </div>
+                        </div>
+                        <div class="form-group for-card" style="display:none;">
+                            <label class="control-label col-sm-3 for-add-both">
+                                Expiry Date:
+                            </label>
+                            <div class="col-sm-9">
+                                @*<input type="text"  class="form-control required" id="txtExpiryDate">*@
+                                <input type="tel" class="form-control" id="txtExpiryDate" name="cardExpiry" placeholder="MM / YY" autocomplete="cc-exp"/>
+                            </div>
+                        </div>
+                        <div class="form-group for-card" style="display:none;">
+                            <label class="control-label col-sm-3 for-add-both">
+                                CV Code:
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="tel" class="form-control" name="cardCVC" id="txtcardCVC" placeholder="CVC" autocomplete="cc-csc" required/>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3 for-add-both">
                                 Amount Due:
@@ -134,7 +160,7 @@
                             <label class="control-label col-sm-3 col-lg-3">Product Name</label>
 
                             <div class="col-sm-8 col-lg-8">
-                                <select id="txtProdName" class="SelProdList form-control for-add-both selectpicker" data-live-search="true" title="Please Select">
+                                <select id="txtProdName" class="SelProdList form-control for-add-both" data-live-search="true" title="Please Select">
 
                                 </select>
                                 @*<form class="eventInsForm" action="#" method="post">
@@ -200,7 +226,7 @@
                $("#txtTotalAmount").val(ComputeCheckOut());
                $("#txtQty").val("");
                //$("#dataPicker").val('default');
-               $("#txtProdName").selectpicker("render");
+               //$("#txtProdName").selectpicker("render");
                //$("#txtProdName").focus();
            }
            else
@@ -268,6 +294,15 @@
 
         $('#txtQty').keyboard({ type: 'numpad' });
         //$('#txtQty').keyboard({ layout: 'qwerty', usePreview: false });
+
+        $("#txtPayment").on("change", function () {
+            if ($(this).val() == "2") {
+                $(".for-card").show();
+            }
+            else {
+                $(".for-card").hide();
+            }
+        });
     });
 
     //$(function () {
@@ -306,7 +341,7 @@
     //});
 
     function GetProductList() {
-        $("#txtProdName").removeClass("selectpicker");
+        //$("#txtProdName").removeClass("selectpicker");
         $.ajax({
             type: "GET",
             url: "/POS/GetProductList",
@@ -341,6 +376,9 @@
         });
         order.items = checkoutlist;
         order.paymentType = $("#txtPayment option:selected").attr("value");
+        order.cardNo = $("#txtCardNumber").val();
+        order.expiryDate = $("#txtExpiryDate").val();
+        order.CVcode = $("#txtcardCVC").val();
         return order;
     }   
 

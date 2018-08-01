@@ -48,13 +48,17 @@ namespace SampleCodeFirstIn.Controllers
         public JsonResult ProcessOrder(Order items)
         {
             var newTransNo = GenerateNewSerial();
+            Nullable<DateTime> date = null;
             db.Transactions.Add(new Transactions()
             {
                 trans_No = newTransNo,
                 Date = DateTime.Now,
                 user = Convert.ToInt32(Session["userid"].ToString()),
-                paymentType = items.items[0].paymentType,
-                shiftid = 1 // Convert.ToInt32(Session["shiftid"].ToString())
+                paymentType = items.paymentType,
+                shiftid = 1, // Convert.ToInt32(Session["shiftid"].ToString())
+                cardNo = items.cardNo,
+                expiryDate = items.expiryDate,
+                CVcode = items.CVcode
 
             });
             foreach (Order.item i in items.items)

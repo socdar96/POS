@@ -30,6 +30,11 @@ namespace SampleCodeFirstIn.Class
     }
     public class Order
     {
+        public int paymentType { get; set; }
+        public int cardNo { get; set; }
+        public DateTime? expiryDate { get; set; }
+        public string CVcode { get; set; }
+
         public class item
         {
             public int trans_No { get; set; }
@@ -38,7 +43,7 @@ namespace SampleCodeFirstIn.Class
             public int prod_qty { get; set; }
             public decimal price { get; set; }
             public decimal prod_total { get; set; }
-            public int paymentType { get; set; }
+            
         }
 
         public List<item> items { get; set; }

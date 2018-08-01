@@ -18,6 +18,9 @@ namespace SampleCodeFirstIn.Models
         public int disAmount { get; set; }
         public int shiftid { get; set; }
         public decimal grossAmount { get; set; }
+        public int cardNo { get; set; }
+        public DateTime? expiryDate { get; set; }
+        public string CVcode { get; set; }
 
         [ForeignKey("trans_No")]
         public ICollection<Transaction_Details> Transaction_Details { get; set; }
